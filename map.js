@@ -6,7 +6,7 @@ require([
     "esri/widgets/Search","esri/widgets/LayerList"
 ], function(esriConfig, Map, MapView, FeatureLayer, BasemapToggle, BasemapGallery, Locate, ScaleBar, Legend, Measurement, Search, LayerList) {
 
-    esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurJqJHuAOWtOeDglllaI2VkGQJcsxVB5nwix6mkxlBH9hZ-AjnV_E71vEK23PSBKxb0vqgeVYKzwB9ZZxXHc5AI3T5Fkxeoj6pehBtt5Cl9Sy4HanCmXsGji5WoKczKyfznal2gcg_5E7nXLUk7rinUNslNDwpjsrPaH_6fcEnf5PrCSoutI49AX_50Bo1xATTQ4DI330jPPj7s9yTLhtghPTd1o750K3mFbhn8YFGxaBAT1_5EgyghtX";
+    esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurIJbcyg--Z0NSed8P7Wqjib8XaB6ReHxsI9uVRBG4mOQo8yGd7pFIe4pcOHlbwR69SinQqy9zTzkZdSz2VTGZ6ECmPcEZ8kcd--Z0_iqF07Rew7TPEdCBEjlP8dMjtQmhSIoMIjiBB_B4wm3cnHnbRlsUluPBOzzA4tsB5fSr7eKATJzbxATPhzkLZLFr1iLD0enWlFYydL-GEQzmLk6uDmp-ANuwxMaMeXG15GF1qUIAT1_HNOoAM8o";
 
     const map = new Map({
         basemap: "arcgis-topographic" // Fond de carte initial
@@ -21,27 +21,27 @@ require([
 
      // 📌 Ajout des couches SIG
      const communesLayer = new FeatureLayer({
-        url: "https://services5.arcgis.com/WQJqoEEGmeDDlKau/arcgis/rest/services/commune_casa1/FeatureServer",
+        url: "https://services5.arcgis.com/FlfGDAZ77bDVEcE9/arcgis/rest/services/Data/FeatureServer/5",
         title: "Limites des Communes"
     });
 
     const voirieLayer = new FeatureLayer({
-        url: "https://services5.arcgis.com/WQJqoEEGmeDDlKau/arcgis/rest/services/voirie/FeatureServer",
+        url: "https://services5.arcgis.com/FlfGDAZ77bDVEcE9/arcgis/rest/services/Data/FeatureServer/4",
         title: "Voirie"
     });
 
     const populationLayer = new FeatureLayer({
-        url: "https://services5.arcgis.com/WQJqoEEGmeDDlKau/arcgis/rest/services/casapop1/FeatureServer",
+        url: "https://services5.arcgis.com/FlfGDAZ77bDVEcE9/arcgis/rest/services/Data/FeatureServer/0",
         title: "Population"
     });
 
     const hotelsLayer = new FeatureLayer({
-        url: "https://services5.arcgis.com/WQJqoEEGmeDDlKau/arcgis/rest/services/hotels/FeatureServer",
+        url: "https://services5.arcgis.com/FlfGDAZ77bDVEcE9/arcgis/rest/services/Data/FeatureServer/2",
         title: "Hôtels"
     });
 
     const grandesSurfacesLayer = new FeatureLayer({
-        url: "https://services5.arcgis.com/WQJqoEEGmeDDlKau/arcgis/rest/services/grands_surface/FeatureServer",
+        url: "https://services5.arcgis.com/FlfGDAZ77bDVEcE9/arcgis/rest/services/Data/FeatureServer/1",
         title: "Grandes Surfaces"
     });
 
