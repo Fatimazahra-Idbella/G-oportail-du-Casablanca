@@ -107,6 +107,51 @@ require([
         position: "bottom-left",
         index: 3
     });*/
+
+
+    // Création du bouton pour la BasemapGallery
+    const basemapButton = document.createElement("button");
+    basemapButton.id = "basemapButton";
+    basemapButton.innerText = "Choisir un fond de carte";
+    document.body.appendChild(basemapButton);
+
+    // Initialisation de la BasemapGallery (non ajoutée directement à l'UI)
+    let basemapGallery = new BasemapGallery({
+        view: view,
+        container: document.createElement("div") // Conteneur temporaire
+    });
+
+    let isGalleryVisible = false;
+
+    // Gestion du clic sur le bouton
+    basemapButton.addEventListener("click", function() {
+        if (!isGalleryVisible) {
+            // Ajouter la galerie à l'UI en bas à gauche
+            view.ui.add(basemapGallery, {
+                position: "bottom-left",
+                index: 3
+            });
+            basemapGallery.container.classList.add("visible"); // Afficher
+            isGalleryVisible = true;
+            basemapButton.innerText = "Masquer les fonds de carte";
+        } else {
+            // Masquer la galerie
+            view.ui.remove(basemapGallery);
+            basemapGallery.container.classList.remove("visible");
+            isGalleryVisible = false;
+            basemapButton.innerText = "Choisir un fond de carte";
+        }
+    });
+
+    // Clic hors de la galerie pour la masquer
+    document.addEventListener("click", function(event) {
+        if (isGalleryVisible && !basemapButton.contains(event.target) && !basemapGallery.container.contains(event.target)) {
+            view.ui.remove(basemapGallery);
+            basemapGallery.container.classList.remove("visible");
+            isGalleryVisible = false;
+            basemapButton.innerText = "Choisir un fond de carte";
+        }
+    });
     // Outil de localisation
     let locateWidget = new Locate({
         view: view
