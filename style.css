@@ -52,8 +52,8 @@ width: 100%;
         cursor: pointer;
         transition: all 0.3s ease;
         position: absolute;
-        bottom: 20px;
-        left: 20px;
+        top: 170px;
+        right: 20px;
         z-index: 10;
     }
     #basemapButton:hover {
@@ -86,7 +86,7 @@ width: 100%;
     cursor: pointer;
     transition: all 0.3s ease;
     position: absolute;
-    top: 20px;
+    top: 120px;
     right: 20px;
     z-index: 10;
 }
@@ -123,14 +123,14 @@ width: 100%;
 
 /* Ajustement des lignes de la barre d'échelle */
 .esri-scale-bar__line {
-    background-color: #4a90e2; /* Couleur bleue moderne pour les lignes */
+    background-color: #000000; /* Couleur bleue moderne pour les lignes */
     height: 4px; /* Épaisseur des lignes */
     border-radius: 2px; /* Coins légèrement arrondis */
 }
 
 /* Style pour les étiquettes de la barre d'échelle */
 .esri-scale-bar__label {
-    color: #4a90e2; /* Couleur assortie aux lignes */
+    color: #000000; /* Couleur assortie aux lignes */
     font-weight: 600; /* Texte en gras pour lisibilité */
 }
 
@@ -150,7 +150,7 @@ width: 100%;
     cursor: pointer;
     transition: all 0.3s ease;
     position: absolute;
-    bottom: 20px;
+    top: 220px;
     right: 20px;
     z-index: 10;
 }
