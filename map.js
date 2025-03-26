@@ -3,8 +3,11 @@ require([
     "esri/widgets/BasemapToggle", "esri/widgets/BasemapGallery",
     "esri/widgets/Locate", "esri/widgets/ScaleBar", 
     "esri/widgets/Legend", "esri/widgets/Measurement",
-    "esri/widgets/Search","esri/widgets/LayerList"
-], function(esriConfig, Map, MapView, FeatureLayer, BasemapToggle, BasemapGallery, Locate, ScaleBar, Legend, Measurement, Search, LayerList) {
+    "esri/widgets/Search","esri/widgets/LayerList",
+    "esri/layers/GraphicsLayer",
+  "esri/widgets/Sketch",
+  "esri/widgets/Editor"
+], function(esriConfig, Map, MapView, FeatureLayer, BasemapToggle, BasemapGallery, Locate, ScaleBar, Legend, Measurement, Search, LayerList, GraphicsLayer, Sketch, Editor) {
 
     esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurIJbcyg--Z0NSed8P7Wqjib8XaB6ReHxsI9uVRBG4mOQo8yGd7pFIe4pcOHlbwR69SinQqy9zTzkZdSz2VTGZ6ECmPcEZ8kcd--Z0_iqF07Rew7TPEdCBEjlP8dMjtQmhSIoMIjiBB_B4wm3cnHnbRlsUluPBOzzA4tsB5fSr7eKATJzbxATPhzkLZLFr1iLD0enWlFYydL-GEQzmLk6uDmp-ANuwxMaMeXG15GF1qUIAT1_HNOoAM8o";
 
@@ -70,10 +73,21 @@ require([
         }
     });
 
+
+    const reclamationsLayer = new FeatureLayer({
+        url: "https://services5.arcgis.com/FlfGDAZ77bDVEcE9/arcgis/rest/services/reclamations/FeatureServer",
+        title: "Réclamations",
+        outFields: ["*"],
+        popupTemplate: {
+            title: "{Objet}",
+            content: "Message : {Message} <br> Contact : {Mail}"
+        }
+    });
+
     
 
     map.addMany([ voirieLayer, populationLayer, 
-                 hotelsLayer, grandesSurfacesLayer]);
+                 hotelsLayer, grandesSurfacesLayer, reclamationsLayer]);
 
     // Basemap Toggle (bascule entre 2 fonds de carte)
     let basemapToggle = new BasemapToggle({
@@ -86,13 +100,13 @@ require([
     });
 
     // Basemap Gallery (liste de fonds de carte)
-    let basemapGallery = new BasemapGallery({
+    /*let basemapGallery = new BasemapGallery({
         view: view
     });
     view.ui.add(basemapGallery, {
         position: "bottom-left",
         index: 3
-    });
+    });*/
     // Outil de localisation
     let locateWidget = new Locate({
         view: view
@@ -171,112 +185,7 @@ view.on("click", function(event) {
 });
  
 
-// Fonction pour interroger la couche Population
-function queryPopulationLayer(geometry) {
-    const populationQuery = populationLayer.createQuery();
-    populationQuery.spatialRelationship = "intersects";
-    populationQuery.geometry = geometry;
-    populationQuery.outFields = ["TOTAL1994", "TOTAL2004"];
-    populationQuery.returnGeometry = true;
 
-    populationLayer.queryFeatures(populationQuery)
-        .then((results) => {
-            console.log("Nombre de zones de population trouvées :", results.features.length);
-            results.features.forEach((feature) => {
-                console.log("Population 1994 :", feature.attributes.TOTAL1994);
-                console.log("Population 2004 :", feature.attributes.TOTAL2004);
-            });
-        })
-        .catch((error) => {
-            console.error("Erreur lors de la requête :", error);
-        });
-}
-
-
-
-
-
-
-
-
-
-// Fonction pour générer la symbologie par classes de population
-function getPopulationRenderer(field) {
-    return new ClassBreaksRenderer({
-        field: field,
-        classBreakInfos: [
-            {
-                minValue: 0,
-                maxValue: 10000,
-                symbol: new SimpleFillSymbol({ color: "#d4f0ff", outline: { color: "#000" } }),
-                label: "Moins de 10 000 habitants"
-            },
-            {
-                minValue: 10000,
-                maxValue: 50000,
-                symbol: new SimpleFillSymbol({ color: "#a0cbe8", outline: { color: "#000" } }),
-                label: "10 000 - 50 000 habitants"
-            },
-            {
-                minValue: 50000,
-                maxValue: 100000,
-                symbol: new SimpleFillSymbol({ color: "#6196cb", outline: { color: "#000" } }),
-                label: "50 000 - 100 000 habitants"
-            },
-            {
-                minValue: 100000,
-                maxValue: 500000,
-                symbol: new SimpleFillSymbol({ color: "#31689f", outline: { color: "#000" } }),
-                label: "100 000 - 500 000 habitants"
-            },
-            {
-                minValue: 500000,
-                maxValue: 2000000,
-                symbol: new SimpleFillSymbol({ color: "#08306b", outline: { color: "#000" } }),
-                label: "Plus de 500 000 habitants"
-            }
-        ]
-    });
-}
-
-// Fonction pour générer les symboles pour le ratio 1994/2004
-function getRatioRenderer() {
-    return new SimpleRenderer({
-        symbol: new PictureMarkerSymbol({
-            url: "https://example.com/diagram.png", // Remplace avec l'URL réelle du diagramme
-            width: "25px",
-            height: "25px"
-        })
-    });
-}
-
-// Filtrage de la population par année ou par évolution
-document.getElementById("populationFilter").addEventListener("change", function(event) {
-    const selectedValue = event.target.value;
-
-    if (selectedValue === "pop2004") {
-        populationLayer.renderer = getPopulationRenderer("TOTAL2004");
-        console.log("Filtre appliqué : Population 2004");
-    } else if (selectedValue === "pop1994") {
-        populationLayer.renderer = getPopulationRenderer("TOTAL1994");
-        console.log("Filtre appliqué : Population 1994");
-    } else if (selectedValue === "ratio") {
-        populationLayer.renderer = getRatioRenderer();
-        console.log("Filtre appliqué : Évolution 1994-2004");
-    } else {
-        populationLayer.renderer = null; // Réinitialiser le filtre
-        console.log("Filtre réinitialisé");
-    }
-});
-
-
-
-
-
-// Ajouter un événement au clic pour interroger la couche Population
-view.on("click", function(event) {
-    queryPopulationLayer(event.mapPoint);
-});
 
     // Filtrage des hôtels par catégorie
     document.getElementById("hotelFilter").addEventListener("change", function (event) {
@@ -314,7 +223,194 @@ view.on("click", function(event) {
     }
 
 
+         // Configuration de l'outil d'édition Editor
+         const editor = new Editor({
+            view: view,
+            layerInfos: [{
+                layer: reclamationsLayer,
+                formTemplate: {
+                    elements: [
+                        {
+                            type: "field",
+                            fieldName: "objet",
+                            label: "Objet"
+                        },
+                        {
+                            type: "field",
+                            fieldName: "Message",
+                            label: "Message"
+                        },
+                        {
+                            type: "field",
+                            fieldName: "Mail",
+                            label: "Email de contact"
+                        }
+                    ]
+                }
+            }],
+            enabled: true,
+            addEnabled: true,
+            updateEnabled: true,
+            deleteEnabled: false,
+            attributeUpdatesEnabled: true,
+            geometryUpdatesEnabled: true
+        });
 
+        // Ajout de l'outil Editor à l'interface
+        view.ui.add(editor, "top-left");
+
+        // Fonction pour récupérer et afficher les réclamations
+        function loadReclamations() {
+            reclamationsLayer.queryFeatures({
+                where: "1=1",
+                outFields: ["Message", "objet", "Mail"],
+                returnGeometry: false
+            }).then(function(response) {
+                const features = response.features;
+                const tableBody = document.getElementById("reclamationsTable");
+                tableBody.innerHTML = ""; // Vider la table avant de recharger
+
+                features.forEach(function(feature) {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${feature.attributes.objet}</td>
+                        <td>${feature.attributes.Message}</td>
+                        <td>${feature.attributes.Mail}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }).catch(function(error) {
+                console.error("Erreur lors du chargement des réclamations :", error);
+            });
+        }
+
+        // Charger les réclamations au démarrage
+        view.when(loadReclamations);
+
+        // Rafraîchir la liste après l'ajout d'une réclamation
+        reclamationsLayer.on("apply-edits", function() {
+            loadReclamations();
+        });
+
+// Définition des filtres SQL
+const sqlExpressions = [
+    "------ Choisir un filtre -----",
+    "--- Population 2004 ---",
+    "TOTAL2004 <= 50000",
+    "TOTAL2004 > 50000 AND TOTAL2004 <= 100000",
+    "TOTAL2004 > 100000 AND TOTAL2004 <= 200000",
+    "TOTAL2004 > 200000 AND TOTAL2004 <= 500000",
+    "TOTAL2004 > 500000",
+    "--- Population 1994 ---",
+    "TOTAL1994 <= 50000",
+    "TOTAL1994 > 50000 AND TOTAL1994 <= 100000",
+    "TOTAL1994 > 100000 AND TOTAL1994 <= 200000",
+    "TOTAL1994 > 200000 AND TOTAL1994 <= 500000",
+    "TOTAL1994 > 500000",
+    "--- Évolution 1994-2004 ---",
+    "evolution_ > 0 AND evolution_ <= 10000",
+    "evolution_ > 10000 AND evolution_ <= 50000",
+    "evolution_ > 50000 AND evolution_ <= 100000",
+    "evolution_ > 100000"
+];
+
+// Création du menu déroulant pour les filtres
+const selectFilter = document.createElement("select");
+selectFilter.style.padding = "5px";
+selectFilter.style.fontSize = "14px";
+selectFilter.id = "filterSelect";
+
+sqlExpressions.forEach(function (sql) {
+    let option = document.createElement("option");
+    option.value = sql.includes("---") ? "" : sql;
+    option.innerHTML = sql;
+    if (sql.includes("---")) {
+        option.disabled = true;
+        option.style.fontWeight = "bold";
+    }
+    selectFilter.appendChild(option);
+});
+
+view.ui.add(selectFilter, "top-right");
+
+// Fonction pour appliquer les filtres
+function setFeatureLayerFilter(expression) {
+    
+    populationLayer.definitionExpression = expression || "";
+}
+
+// Écouteur pour appliquer le filtre
+selectFilter.addEventListener("change", function (event) {
+    setFeatureLayerFilter(event.target.value);
+});
+
+// Renderers pour la population
+const pop2004Renderer = new ClassBreaksRenderer({
+    field: "TOTAL2004",
+    classBreakInfos: [
+        { minValue: 0, maxValue: 50000, symbol: new SimpleFillSymbol({ color: new Color([255, 245, 235, 0.7]) }), label: "0 - 50,000" },
+        { minValue: 50001, maxValue: 100000, symbol: new SimpleFillSymbol({ color: new Color([255, 215, 180, 0.7]) }), label: "50,001 - 100,000" },
+        { minValue: 100001, maxValue: 200000, symbol: new SimpleFillSymbol({ color: new Color([255, 175, 120, 0.7]) }), label: "100,001 - 200,000" },
+        { minValue: 200001, maxValue: 500000, symbol: new SimpleFillSymbol({ color: new Color([255, 135, 60, 0.7]) }), label: "200,001 - 500,000" },
+        { minValue: 500001, maxValue: 1000000, symbol: new SimpleFillSymbol({ color: new Color([255, 95, 0, 0.7]) }), label: "> 500,000" }
+    ]
+});
+
+const pop1994Renderer = new ClassBreaksRenderer({
+    field: "TOTAL1994",
+    classBreakInfos: [
+        { minValue: 0, maxValue: 50000, symbol: new SimpleFillSymbol({ color: new Color([235, 245, 255, 0.7]) }), label: "0 - 50,000" },
+        { minValue: 50001, maxValue: 100000, symbol: new SimpleFillSymbol({ color: new Color([180, 215, 255, 0.7]) }), label: "50,001 - 100,000" },
+        { minValue: 100001, maxValue: 200000, symbol: new SimpleFillSymbol({ color: new Color([120, 175, 255, 0.7]) }), label: "100,001 - 200,000" },
+        { minValue: 200001, maxValue: 500000, symbol: new SimpleFillSymbol({ color: new Color([60, 135, 255, 0.7]) }), label: "200,001 - 500,000" },
+        { minValue: 500001, maxValue: 1000000, symbol: new SimpleFillSymbol({ color: new Color([0, 95, 255, 0.7]) }), label: "> 500,000" }
+    ]
+});
+
+const pieChartRenderer = new PieChartRenderer({
+    attributes: [
+        { field: "TOTAL1994", label: "Population 1994", color: new Color([0, 120, 255, 0.8]) },
+        { field: "TOTAL2004", label: "Population 2004", color: new Color([255, 120, 0, 0.8]) }
+    ],
+    holePercentage: 0.2,
+    size: 20
+});
+
+// Création d'un sélecteur pour la visualisation de la population
+const populationSelect = document.createElement("select");
+populationSelect.id = "populationFilter";
+populationSelect.style.padding = "5px";
+populationSelect.style.fontSize = "14px";
+populationSelect.innerHTML = `
+    <option value="default">Affichage par défaut</option>
+    <option value="pop2004">Population 2004 (5 classes)</option>
+    <option value="pop1994">Population 1994 (5 classes)</option>
+    <option value="pieChart">Comparaison 1994/2004 (diagrammes)</option>
+`;
+view.ui.add(populationSelect, "top-right");
+
+// Écouteur pour le sélecteur de population
+populationSelect.addEventListener("change", function(event) {
+    const selectedValue = event.target.value;
+    switch (selectedValue) {
+        case "pop2004":
+            populationLayer.renderer = pop2004Renderer;
+            populationLayer.definitionExpression = ""; // Réinitialiser le filtre pour voir toutes les données
+            break;
+        case "pop1994":
+            populationLayer.renderer = pop1994Renderer;
+            populationLayer.definitionExpression = "";
+            break;
+        case "pieChart":
+            populationLayer.renderer = pieChartRenderer;
+            populationLayer.definitionExpression = "";
+            break;
+        default:
+            populationLayer.renderer = null;
+            break;
+    }
+    console.log("Renderer appliqué :", selectedValue);
+});
 
 
 });

@@ -74,12 +74,7 @@
               <option value="Shape_Area > 100000000">Très grandes (> 100M m²)</option>
           </optgroup>
       </select>
-      <select id="populationFilter">
-        <option value="">Par défaut</option>
-        <option value="8480">Population 2004</option>
-        <option value="pop1994">Population 1994</option>
-        <option value="pieChart">Comparaison 1994/2004</option>
-    </select>
+      
     <select id="hotelFilter">
       <option value="">Tous les hôtels</option>
       <option value="1*">1*</option>
@@ -110,5 +105,20 @@
     <option value="LABEL VIE">LABEL VIE</option>
     <option value="Twin Center">Twin Center</option>
   </select>
+
+  <div id="listContainer">
+    <h4>Liste des Réclamations</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Objet</th>
+                <th>Message</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody id="reclamationsTable"></tbody>
+    </table>
+</div>
+</div>
 </body>
 </html>
