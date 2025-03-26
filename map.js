@@ -133,7 +133,7 @@ require([
         if (!isGalleryVisible) {
             // Ajouter la galerie à l'UI en bas à gauche
             view.ui.add(basemapGallery, {
-                position: "bottom-left",
+                position: "top-right",
                 index: 3
             });
             basemapGallery.container.classList.add("visible"); // Afficher
@@ -164,7 +164,7 @@ require([
     let locateWidget = new Locate({
         view: view
     });
-    view.ui.add(locateWidget, "top-left");
+    view.ui.add(locateWidget, "top-right");
 
     // Barre d'échelle
     let scaleBar = new ScaleBar({
@@ -204,7 +204,7 @@ require([
         if (!isLegendVisible) {
             // Ajouter la légende à l'UI en bas à droite
             view.ui.add(legend, {
-                position: "bottom-right"
+                position: "top-right"
             });
             legend.container.classList.add("visible"); // Afficher
             isLegendVisible = true;
@@ -613,3 +613,4 @@ document.addEventListener("click", function(event) {
 });
 
 });
+
