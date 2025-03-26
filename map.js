@@ -6,8 +6,13 @@ require([
     "esri/widgets/Search","esri/widgets/LayerList",
     "esri/layers/GraphicsLayer",
   "esri/widgets/Sketch",
-  "esri/widgets/Editor"
-], function(esriConfig, Map, MapView, FeatureLayer, BasemapToggle, BasemapGallery, Locate, ScaleBar, Legend, Measurement, Search, LayerList, GraphicsLayer, Sketch, Editor) {
+  "esri/widgets/Editor",
+    "esri/renderers/ClassBreaksRenderer",
+    "esri/renderers/PieChartRenderer",
+    "esri/symbols/SimpleFillSymbol",
+    "esri/Color"
+
+], function(esriConfig, Map, MapView, FeatureLayer, BasemapToggle, BasemapGallery, Locate, ScaleBar, Legend, Measurement, Search, LayerList, GraphicsLayer, Sketch, Editor, ClassBreaksRenderer, PieChartRenderer, SimpleFillSymbol, Color) {
 
     esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurIJbcyg--Z0NSed8P7Wqjib8XaB6ReHxsI9uVRBG4mOQo8yGd7pFIe4pcOHlbwR69SinQqy9zTzkZdSz2VTGZ6ECmPcEZ8kcd--Z0_iqF07Rew7TPEdCBEjlP8dMjtQmhSIoMIjiBB_B4wm3cnHnbRlsUluPBOzzA4tsB5fSr7eKATJzbxATPhzkLZLFr1iLD0enWlFYydL-GEQzmLk6uDmp-ANuwxMaMeXG15GF1qUIAT1_HNOoAM8o";
 
@@ -152,6 +157,9 @@ require([
             basemapButton.innerText = "Choisir un fond de carte";
         }
     });
+
+    
+   
     // Outil de localisation
     let locateWidget = new Locate({
         view: view
@@ -171,10 +179,54 @@ require([
     view.ui.add(measurementWidget, "top-right");
 
     // Légende
-    let legend = new Legend({
+    /*let legend = new Legend({
         view: view
     });
-    view.ui.add(legend, "bottom-right");
+    view.ui.add(legend, "bottom-right");*/
+
+
+    // Création du bouton pour la Legend
+    const legendButton = document.createElement("button");
+    legendButton.id = "legendButton";
+    legendButton.innerText = "Afficher la légende";
+    document.body.appendChild(legendButton);
+
+    // Initialisation de la Legend (non ajoutée directement à l'UI)
+    let legend = new Legend({
+        view: view,
+        container: document.createElement("div") // Conteneur temporaire
+    });
+
+    let isLegendVisible = false;
+
+    // Gestion du clic sur le bouton
+    legendButton.addEventListener("click", function() {
+        if (!isLegendVisible) {
+            // Ajouter la légende à l'UI en bas à droite
+            view.ui.add(legend, {
+                position: "bottom-right"
+            });
+            legend.container.classList.add("visible"); // Afficher
+            isLegendVisible = true;
+            legendButton.innerText = "Masquer la légende";
+        } else {
+            // Masquer la légende
+            view.ui.remove(legend);
+            legend.container.classList.remove("visible");
+            isLegendVisible = false;
+            legendButton.innerText = "Afficher la légende";
+        }
+    });
+
+    // Clic hors de la légende pour la masquer
+    document.addEventListener("click", function(event) {
+        if (isLegendVisible && !legendButton.contains(event.target) && !legend.container.contains(event.target)) {
+            view.ui.remove(legend);
+            legend.container.classList.remove("visible");
+            isLegendVisible = false;
+            legendButton.innerText = "Afficher la légende";
+        }
+    });
 
     // Widget de recherche
     let searchWidget = new Search({
@@ -182,11 +234,61 @@ require([
     });
     view.ui.add(searchWidget, "top-right");
 
+
+    
+
+
+  
+
     // Liste des couches
-    let layerList = new LayerList({
+    /*let layerList = new LayerList({
         view: view
     });
-    view.ui.add(layerList, "top-right");
+    view.ui.add(layerList, "top-right");*/
+
+
+    // Création du bouton pour la LayerList
+    const layerListButton = document.createElement("button");
+    layerListButton.id = "layerListButton";
+    layerListButton.innerText = "Liste des couches";
+    document.body.appendChild(layerListButton);
+
+    // Initialisation de la LayerList (non ajoutée directement à l'UI)
+    let layerList = new LayerList({
+        view: view,
+        container: document.createElement("div") // Conteneur temporaire
+    });
+
+    let isLayerListVisible = false;
+
+    // Gestion du clic sur le bouton
+    layerListButton.addEventListener("click", function() {
+        if (!isLayerListVisible) {
+            // Ajouter la liste des couches à l'UI en haut à droite
+            view.ui.add(layerList, {
+                position: "top-right"
+            });
+            layerList.container.classList.add("visible"); // Afficher
+            isLayerListVisible = true;
+            layerListButton.innerText = "Masquer la liste";
+        } else {
+            // Masquer la liste
+            view.ui.remove(layerList);
+            layerList.container.classList.remove("visible");
+            isLayerListVisible = false;
+            layerListButton.innerText = "Liste des couches";
+        }
+    });
+
+    // Clic hors de la liste pour la masquer
+    document.addEventListener("click", function(event) {
+        if (isLayerListVisible && !layerListButton.contains(event.target) && !layerList.container.contains(event.target)) {
+            view.ui.remove(layerList);
+            layerList.container.classList.remove("visible");
+            isLayerListVisible = false;
+            layerListButton.innerText = "Liste des couches";
+        }
+    });
 
     // Fonction pour interroger la couche des communes
     function queryFeatureLayer(geometry) {
@@ -338,7 +440,7 @@ view.on("click", function(event) {
         });
 
 // Définition des filtres SQL
-const sqlExpressions = [
+/*const sqlExpressions = [
     "------ Choisir un filtre -----",
     "--- Population 2004 ---",
     "TOTAL2004 <= 50000",
@@ -388,7 +490,7 @@ function setFeatureLayerFilter(expression) {
 selectFilter.addEventListener("change", function (event) {
     setFeatureLayerFilter(event.target.value);
 });
-
+*/
 // Renderers pour la population
 const pop2004Renderer = new ClassBreaksRenderer({
     field: "TOTAL2004",
@@ -422,7 +524,7 @@ const pieChartRenderer = new PieChartRenderer({
 });
 
 // Création d'un sélecteur pour la visualisation de la population
-const populationSelect = document.createElement("select");
+/*const populationSelect = document.createElement("select");
 populationSelect.id = "populationFilter";
 populationSelect.style.padding = "5px";
 populationSelect.style.fontSize = "14px";
@@ -455,7 +557,59 @@ populationSelect.addEventListener("change", function(event) {
             break;
     }
     console.log("Renderer appliqué :", selectedValue);
+});*/
+
+
+
+
+
+// Gestion des filtres pour les communes
+document.getElementById("filterSelect").addEventListener("change", function(event) {
+    communesLayer.definitionExpression = event.target.value || "";
 });
 
+
+// Gestion des filtres SQL pour la population
+document.getElementById("populationSqlFilter").addEventListener("change", function(event) {
+    populationLayer.definitionExpression = event.target.value || "";
+});
+
+
+// Gestion du sélecteur pour la visualisation PieChart
+document.getElementById("populationPieChartFilter").addEventListener("change", function(event) {
+    const selectedValue = event.target.value;
+    if (selectedValue === "pieChart") {
+        populationLayer.renderer = pieChartRenderer;
+        populationLayer.definitionExpression = ""; // Réinitialiser le filtre pour voir toutes les données
+    } else {
+        populationLayer.renderer = null; // Retour à l'affichage par défaut
+    }
+    console.log("Renderer appliqué :", selectedValue);
+});
+// Bouton et menu
+const filterMenuButton = document.getElementById("filterMenuButton");
+const filtersMenu = document.getElementById("filtersMenu");
+let isMenuVisible = false;
+
+filterMenuButton.addEventListener("click", function(event) {
+    event.stopPropagation();
+    if (!isMenuVisible) {
+        filtersMenu.classList.remove("hidden");
+        filterMenuButton.innerText = "Masquer les filtres";
+        isMenuVisible = true;
+    } else {
+        filtersMenu.classList.add("hidden");
+        filterMenuButton.innerText = "Filtres";
+        isMenuVisible = false;
+    }
+});
+
+document.addEventListener("click", function(event) {
+    if (isMenuVisible && !filtersMenu.contains(event.target) && !filterMenuButton.contains(event.target)) {
+        filtersMenu.classList.add("hidden");
+        filterMenuButton.innerText = "Filtres";
+        isMenuVisible = false;
+    }
+});
 
 });

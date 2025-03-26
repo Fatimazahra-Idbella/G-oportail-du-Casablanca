@@ -16,6 +16,8 @@
   </head>
 <body>
     <div id="viewDiv"></div>
+    
+
     <div id="filtersDiv">
       <label for="filterSelect">Filtrer par communes :</label>
       <select id="filterSelect">
@@ -74,9 +76,41 @@
               <option value="Shape_Area > 100000000">Très grandes (> 100M m²)</option>
           </optgroup>
       </select>
-      
+
+
+
+
+
+
+
+      <label for="populationSqlFilter">Filtrer par population :</label>
+            <select id="populationSqlFilter">
+                <option value="">-- Tous les population --</option>
+                <optgroup label="Population 2004">
+                    <option value="TOTAL2004 <= 50000">0 - 50,000</option>
+                    <option value="TOTAL2004 > 50000 AND TOTAL2004 <= 100000">50,001 - 100,000</option>
+                    <option value="TOTAL2004 > 100000 AND TOTAL2004 <= 200000">100,001 - 200,000</option>
+                    <option value="TOTAL2004 > 200000 AND TOTAL2004 <= 500000">200,001 - 500,000</option>
+                    <option value="TOTAL2004 > 500000">> 500,000</option>
+                </optgroup>
+                <optgroup label="Population 1994">
+                    <option value="TOTAL1994 <= 50000">0 - 50,000</option>
+                    <option value="TOTAL1994 > 50000 AND TOTAL1994 <= 100000">50,001 - 100,000</option>
+                    <option value="TOTAL1994 > 100000 AND TOTAL1994 <= 200000">100,001 - 200,000</option>
+                    <option value="TOTAL1994 > 200000 AND TOTAL1994 <= 500000">200,001 - 500,000</option>
+                    <option value="TOTAL1994 > 500000">> 500,000</option>
+                </optgroup>
+                
+            </select>
+
+            <label for="populationPieChartFilter">Diagrammes population 1994/2004 :</label>
+            <select id="populationPieChartFilter">
+                <option value="default">--Affichage par défaut--</option>
+                <option value="pieChart">Population 1994/2004 </option>
+            </select>
+    <label for="hotelFilter">Filtrer par hôtels :</label>
     <select id="hotelFilter">
-      <option value="">Tous les hôtels</option>
+      <option value="">--Tous les hôtels--</option>
       <option value="1*">1*</option>
       <option value="2*">2*</option>
       <option value="3*">3*</option>
@@ -95,9 +129,9 @@
       <option value="cinema">cinema</option>
       
   </select>
-  
+  <label for="surfaceFilter">Filtrer par grandes surfaces :</label>
   <select id="surfaceFilter">
-      <option value="">Toutes les grandes surfaces</option>
+      <option value="">--Toutes les grandes surfaces--</option>
       <option value="Marjane">Marjane</option>
       <option value="Acima">Acima</option>
       <option value="Metro">Metro</option>
@@ -105,9 +139,9 @@
     <option value="LABEL VIE">LABEL VIE</option>
     <option value="Twin Center">Twin Center</option>
   </select>
-
+  
   <div id="listContainer">
-    <h4>Liste des Réclamations</h4>
+    <h4>Liste des Réclamations :</h4>
     <table>
         <thead>
             <tr>
@@ -119,6 +153,8 @@
         <tbody id="reclamationsTable"></tbody>
     </table>
 </div>
-</div>
+
+
+          
 </body>
 </html>

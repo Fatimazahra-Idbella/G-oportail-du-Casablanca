@@ -74,3 +74,187 @@ width: 100%;
     .esri-basemap-gallery.visible {
         display: block; /* Affichée au clic */
     }
+
+/* Bouton pour la LayerList */
+#layerListButton {
+    background-color: #4a90e2;
+    border: 2px solid #4a90e2;
+    color: white;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+#layerListButton:hover {
+    background-color: #357abd;
+    border-color: #357abd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Style pour la LayerList */
+.esri-layer-list {
+    background: rgba(255, 255, 255, 0.95);
+        border-radius: 5px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        max-height: 400px;
+        overflow-y: auto;
+        display: none; /* Masquée par défaut */
+    }
+    .esri-layer-list.visible {
+        display: block; /* Affichée au clic */
+    }
+
+/* Style pour la ScaleBar */
+.esri-scale-bar {
+    background: rgba(255, 255, 255, 0.95); /* Fond blanc semi-transparent */
+    border-radius: 5px; /* Coins arrondis */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); /* Ombre légère */
+    padding: 5px 10px; /* Espacement interne */
+    font-family: 'Arial', sans-serif; /* Police moderne */
+    font-size: 12px; /* Taille de texte */
+    color: #333; /* Couleur du texte */
+    border: 1px solid #ddd; /* Bordure subtile */
+}
+
+/* Ajustement des lignes de la barre d'échelle */
+.esri-scale-bar__line {
+    background-color: #4a90e2; /* Couleur bleue moderne pour les lignes */
+    height: 4px; /* Épaisseur des lignes */
+    border-radius: 2px; /* Coins légèrement arrondis */
+}
+
+/* Style pour les étiquettes de la barre d'échelle */
+.esri-scale-bar__label {
+    color: #4a90e2; /* Couleur assortie aux lignes */
+    font-weight: 600; /* Texte en gras pour lisibilité */
+}
+
+/* Positionnement dans view.ui (optionnel, pour renforcer bottom-left) */
+.esri-ui-bottom-left .esri-scale-bar {
+    margin: 10px; /* Marge pour éviter qu'elle colle au bord */
+}
+
+/* Bouton pour la Legend */
+#legendButton {
+    background-color: #4a90e2;
+    border: 2px solid #4a90e2;
+    color: white;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
+}
+#legendButton:hover {
+    background-color: #357abd;
+    border-color: #357abd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Style pour la Legend */
+.esri-legend {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    max-height: 300px;
+    overflow-y: auto;
+    display: none; /* Masquée par défaut */
+}
+.esri-legend.visible {
+    display: block; /* Affichée au clic */
+}
+
+/* Ajustement du texte et des éléments de la légende */
+.esri-legend__service-label {
+    font-weight: 600;
+    color: #333;
+}
+.esri-legend__layer-caption {
+    font-size: 14px;
+    color: #555;
+}
+
+
+/* Bouton du menu */
+#filterMenuButton {
+    background-color: #4a90e2;
+    border: 2px solid #4a90e2;
+    color: white;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+#filterMenuButton:hover {
+    background-color: #357abd;
+    border-color: #357abd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Conteneur du menu */
+#filtersMenu {
+    position: absolute;
+    top: 60px; /* Juste en dessous du bouton */
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    padding: 15px;
+    width: 300px; /* Largeur fixe pour le menu */
+    max-height: 400px; /* Hauteur maximale avec défilement */
+    overflow-y: auto;
+    z-index: 9;
+}
+#filtersMenu.hidden {
+    display: none; /* Masqué par défaut */
+}
+
+/* Style des éléments internes */
+#filtersDiv {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espacement entre les filtres */
+}
+
+#filtersDiv label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+#filtersDiv select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+}
+#filtersDiv select:hover, #filtersDiv select:focus {
+    border-color: #4a90e2;
+    outline: none;
+}
+
+#filtersDiv optgroup {
+    font-weight: bold;
+    color: #555;
+}
+
+#filtersDiv option {
+    padding: 5px;
+}
