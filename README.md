@@ -58,8 +58,8 @@ Ce projet consiste à développer un **Géoportail interactif** basé sur **ArcG
 
 - [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/)
 - HTML / CSS / JavaScript
-- ArcGIS Online ou ArcGIS Enterprise (selon le cas)
-- (Optionnel) Framework UI : Bootstrap ou Tailwind CSS
+- ArcGIS Online
+- (Optionnel) Framework UI : Bootstrap 
 
 ---
 
